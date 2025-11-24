@@ -1,0 +1,79 @@
+<% fetch = ->(obj, key) do
+     if obj.respond_to?(key)
+       obj.public_send(key)
+     elsif obj.respond_to?(:[])
+       obj[key.to_s] || obj[key]
+     end
+   end %>
+
+<section class="max-w-4xl mx-auto">
+  <p class="text-xs font-medium uppercase tracking-[0.2em] text-indigo-500">
+    Events
+  </p>
+  <h1 class="mt-2 text-2xl font-semibold text-slate-900">
+    <span class="font-mono text-sm text-slate-600">Customer:</span>
+    <%= params[:external_id] %>
+  </h1>
+
+  <% if @error %>
+    <div class="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      There was a problem fetching events: <%= @error.message %>
+    </div>
+  <% end %>
+
+  <% if @events.blank? %>
+    <p class="mt-6 text-sm text-slate-500">
+      No events found for this customer.
+    </p>
+  <% else %>
+    <div class="mt-6 grid gap-4">
+      <% @events.each do |event| %>
+        <% code           = fetch.call(event, :code) || "unknown" %>
+        <% timestamp      = fetch.call(event, :timestamp) || fetch.call(event, :happened_at) %>
+        <% subscription   = fetch.call(event, :external_subscription_id) %>
+        <% properties     = fetch.call(event, :properties) || {} %>
+        <% transaction_id = fetch.call(event, :transaction_id) %>
+
+        <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-500">Event</p>
+              <p class="font-semibold text-slate-900"><%= code %></p>
+            </div>
+            <% if timestamp %>
+              <span class="text-xs text-slate-500">At <%= timestamp %></span>
+            <% end %>
+          </div>
+
+          <div class="mt-2 text-sm text-slate-600 space-y-1">
+            <% if subscription %>
+              <div>Subscription: <span class="font-mono text-[11px] text-slate-700"><%= subscription %></span></div>
+            <% end %>
+            <% if transaction_id %>
+              <div>Transaction: <span class="font-mono text-[11px] text-slate-700"><%= transaction_id %></span></div>
+            <% end %>
+          </div>
+
+          <% if properties.present? %>
+            <div class="mt-3 text-sm text-slate-700">
+              <p class="font-medium">Properties</p>
+              <ul class="mt-1 space-y-1">
+                <% properties.each do |k, v| %>
+                  <li class="flex items-start gap-2 text-slate-600">
+                    <span class="font-mono text-[11px] text-slate-700"><%= k %>:</span>
+                    <span><%= v %></span>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="mt-6">
+    <%= link_to "Back to customer", customer_path(params[:external_id]),
+                class: "inline-flex items-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50" %>
+  </div>
+</section>

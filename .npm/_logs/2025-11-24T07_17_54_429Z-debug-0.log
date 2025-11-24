@@ -1,0 +1,28 @@
+0 verbose cli /opt/homebrew/Cellar/node/25.2.1/bin/node /opt/homebrew/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@11.6.2
+2 info using node@v25.2.1
+3 silly config load:file:/opt/homebrew/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/billyu/lago_billing_demo/.npmrc
+5 silly config load:file:/Users/billyu/.npmrc
+6 silly config load:file:/opt/homebrew/etc/npmrc
+7 verbose title npm exec tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css --minify
+8 verbose argv "exec" "--" "tailwindcss" "-i" "./app/assets/stylesheets/application.tailwind.css" "-o" "./app/assets/builds/tailwind.css" "--minify"
+9 verbose logfile logs-max:10 dir:/Users/billyu/lago_billing_demo/.npm/_logs/2025-11-24T07_17_54_429Z-
+10 verbose logfile /Users/billyu/lago_billing_demo/.npm/_logs/2025-11-24T07_17_54_429Z-debug-0.log
+11 silly logfile done cleaning log files
+12 http fetch GET https://registry.npmjs.org/npm attempt 1 failed with ENOTFOUND
+13 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+14 verbose stack Error: could not determine executable to run
+14 verbose stack     at getBinFromManifest (/opt/homebrew/lib/node_modules/npm/node_modules/libnpmexec/lib/get-bin-from-manifest.js:17:23)
+14 verbose stack     at exec (/opt/homebrew/lib/node_modules/npm/node_modules/libnpmexec/lib/index.js:206:15)
+14 verbose stack     at async Npm.exec (/opt/homebrew/lib/node_modules/npm/lib/npm.js:208:9)
+14 verbose stack     at async module.exports (/opt/homebrew/lib/node_modules/npm/lib/cli/entry.js:67:5)
+15 verbose pkgid tailwindcss@4.1.17
+16 error could not determine executable to run
+17 verbose cwd /Users/billyu/lago_billing_demo
+18 verbose os Darwin 24.6.0
+19 verbose node v25.2.1
+20 verbose npm  v11.6.2
+21 verbose exit 1
+22 verbose code 1
+23 error A complete log of this run can be found in: /Users/billyu/lago_billing_demo/.npm/_logs/2025-11-24T07_17_54_429Z-debug-0.log

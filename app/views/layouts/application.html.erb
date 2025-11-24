@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Lago Billing Demo" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Lago Billing Demo">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  </head>
+
+  <body class="bg-slate-50 text-slate-900">
+    <header class="border-b border-slate-200 bg-white">
+      <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+        <div class="flex items-center gap-2">
+          <div class="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-semibold">
+            L
+          </div>
+          <span class="font-semibold text-lg">Lago Billing Demo</span>
+        </div>
+
+        <nav class="flex items-center gap-4 text-sm">
+          <%= link_to "Pricing", pricing_path, class: "text-slate-600 hover:text-slate-900" %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="min-h-[calc(100vh-56px)] flex items-center">
+      <div class="w-full max-w-6xl mx-auto px-4 py-10">
+        <% if notice %>
+          <div class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+            <%= notice %>
+          </div>
+        <% end %>
+
+        <% if alert %>
+          <div class="mb-6 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+            <%= alert %>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!-- app/views/customers/show.html.erb -->
+<section class="max-w-3xl mx-auto">
+  <p class="text-xs font-medium uppercase tracking-[0.2em] text-indigo-500">
+    Customer
+  </p>
+
+  <% if @customer.present? %>
+    <h1 class="mt-2 text-2xl font-semibold text-slate-900">
+      <%= @customer_name.presence || "Customer" %>
+    </h1>
+
+    <p class="mt-1 text-sm text-slate-500">
+      External ID:
+      <span class="font-mono text-xs text-slate-700">
+        <%= @customer_external_id || "N/A" %>
+      </span>
+    </p>
+
+    <% if @subscription.present? %>
+      <div class="mt-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <p class="text-sm text-slate-500">Current subscription</p>
+        <p class="mt-1 text-base font-semibold text-slate-900">
+          <%= @plan_name.presence || @subscription_plan_code || "Unknown plan" %>
+        </p>
+        <p class="mt-1 text-xs text-slate-500">
+          <% if @subscription_external_id %>
+            <span class="font-mono text-[11px] text-slate-700">ID: <%= @subscription_external_id %></span>
+            &bull;
+          <% end %>
+          Status:
+          <span class="font-medium text-slate-700"><%= @subscription_status.presence || "unknown" %></span>
+        </p>
+      </div>
+    <% else %>
+      <p class="mt-4 text-sm text-slate-500">
+        No active subscription found for this customer.
+      </p>
+    <% end %>
+
+    <div class="mt-6 flex gap-3">
+      <%= link_to "View invoices",
+                  customer_invoices_path(external_id: @customer_external_id),
+                  class: "inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" %>
+
+      <%= link_to "View events",
+                  customer_events_path(external_id: @customer_external_id),
+                  class: "inline-flex items-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50" %>
+
+      <%= button_to "Ingest event",
+                    customer_ingest_event_path(external_id: @customer_external_id),
+                    method: :post,
+                    class: "inline-flex items-center rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2.5 text-sm font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" %>
+
+      <%= link_to "Back to pricing",
+                  pricing_path,
+                  class: "inline-flex items-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50" %>
+    </div>
+  <% else %>
+    <h1 class="mt-2 text-2xl font-semibold text-slate-900">
+      Customer not found
+    </h1>
+    <p class="mt-1 text-sm text-slate-500">
+      We couldn’t load this customer from Lago.
+    </p>
+
+    <div class="mt-6">
+      <%= link_to "Back to pricing",
+                  pricing_path,
+                  class: "inline-flex items-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50" %>
+    </div>
+  <% end %>
+</section>

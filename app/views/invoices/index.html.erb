@@ -1,0 +1,69 @@
+<% fetch = ->(obj, key) do
+     if obj.respond_to?(key)
+       obj.public_send(key)
+     elsif obj.respond_to?(:[])
+       obj[key.to_s] || obj[key]
+     end
+   end %>
+
+<section class="max-w-4xl mx-auto">
+  <p class="text-xs font-medium uppercase tracking-[0.2em] text-indigo-500">
+    Invoices
+  </p>
+  <h1 class="mt-2 text-2xl font-semibold text-slate-900">
+    <span class="font-mono text-sm text-slate-600">Customer:</span>
+    <%= params[:external_id] %>
+  </h1>
+
+  <% if @error %>
+    <div class="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      There was a problem fetching invoices: <%= @error.message %>
+    </div>
+  <% end %>
+
+  <% if @invoices.blank? %>
+    <p class="mt-6 text-sm text-slate-500">
+      No invoices found for this customer.
+    </p>
+  <% else %>
+    <div class="mt-6 grid gap-4">
+      <% @invoices.each do |invoice| %>
+        <% number        = fetch.call(invoice, :number) || "—" %>
+        <% status        = fetch.call(invoice, :status) || "unknown" %>
+        <% total_cents   = fetch.call(invoice, :total_amount_cents) || 0 %>
+        <% currency      = (fetch.call(invoice, :currency) || "USD").upcase %>
+        <% issuing_date  = fetch.call(invoice, :issuing_date) || fetch.call(invoice, :issuing_at) %>
+        <% file_url      = fetch.call(invoice, :file_url) || fetch.call(invoice, :download_url) %>
+
+        <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-500">Invoice</p>
+              <p class="font-semibold text-slate-900"><%= number %></p>
+            </div>
+            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700">
+              <%= status %>
+            </span>
+          </div>
+
+          <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-600">
+            <span class="font-medium text-slate-900">
+              <%= number_to_currency(total_cents.to_f / 100.0, unit: currency) %>
+            </span>
+            <% if issuing_date %>
+              <span class="text-slate-500">Issued: <%= issuing_date %></span>
+            <% end %>
+          </div>
+
+          <% if file_url %>
+            <div class="mt-3">
+              <a href="<%= file_url %>" class="text-sm font-medium text-indigo-600 hover:text-indigo-700" target="_blank" rel="noopener">
+                Download PDF
+              </a>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</section>
